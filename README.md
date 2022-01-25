@@ -1,6 +1,6 @@
 # Servy
 
-**TODO: Add description**
+Just learning to write an http server with Elixir.
 
 ## Installation
 
