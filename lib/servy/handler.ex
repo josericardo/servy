@@ -43,12 +43,12 @@ defmodule Servy.Handler do
 
   def track(conv), do: conv
 
-  def route(conv) do
-    route(conv, conv.method, conv.path)
+  def route(%{ method: "DELETE", path: "/bears/" <> _id} = conv) do
+    %{ conv | status: 403, resp_body: "Deleting a bear is forbidden!" }
   end
 
-  def route(conv, "GET", "/wildthings") do
-    %{ conv | status: 200, resp_body: "Bears, Lions, Tigers" }
+  def route(conv) do
+    route(conv, conv.method, conv.path)
   end
 
   def route(conv, "GET", "/bears" <> id) do
@@ -63,14 +63,13 @@ defmodule Servy.Handler do
     %{ conv | status: 200, resp_body: "roooarrr" }
   end
 
-  def route(%{ method: "DELETE", path: "/bears/" <> _id} = conv) do
-    %{ conv | status: 403, resp_body: "Deleting a bear is forbidden!" }
+  def route(conv, "GET", "/wildthings") do
+    %{ conv | status: 200, resp_body: "Bears, Lions, Tigers" }
   end
 
   def route(conv, _method, path) do
     %{ conv | status: 404, resp_body: "No #{path} here!" }
   end
-
 
   def format_response(conv) do
     """
