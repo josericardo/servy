@@ -12,7 +12,7 @@ defmodule ServyHandlerTest do
 
     expected = %{
       method: "GET",
-      resp_body:  "",
+      resp_body: "",
       path: "/wildthings",
       status: nil
     }
@@ -23,7 +23,7 @@ defmodule ServyHandlerTest do
   test "Handles redirections" do
     conv = %{
       method: "GET",
-      resp_body:  "",
+      resp_body: "",
       path: "/wildlife",
       status: nil
     }
@@ -59,6 +59,7 @@ defmodule ServyHandlerTest do
     Accept: */*
 
     """
+
     response = Servy.Handler.handle(request)
     assert String.contains?(response, "bear /2")
   end

@@ -13,35 +13,35 @@ defmodule Servy.Handler do
     [method, path, _] =
       request
       |> String.split("\n")
-      |> List.first
+      |> List.first()
       |> String.split(" ")
 
-    %{ method: method, status: nil, path: path, resp_body: "" }
+    %{method: method, status: nil, path: path, resp_body: ""}
   end
 
   def emojify(conv) do
-    %{ conv | resp_body: "😜 #{conv[:resp_body]} 😎" }
+    %{conv | resp_body: "😜 #{conv[:resp_body]} 😎"}
   end
 
-  def rewrite_path(%{ path: "/wildlife" } = conv) do
-    %{ conv | path: "/wildthings" }
+  def rewrite_path(%{path: "/wildlife"} = conv) do
+    %{conv | path: "/wildthings"}
   end
 
-  def rewrite_path(%{ path: "/bears?id=" <> bear_id } = conv) do
-    %{ conv | path: "/bears/#{bear_id}" }
+  def rewrite_path(%{path: "/bears?id=" <> bear_id} = conv) do
+    %{conv | path: "/bears/#{bear_id}"}
   end
 
   def rewrite_path(conv), do: conv
 
-  def track(%{ status: 404 } = conv) do
+  def track(%{status: 404} = conv) do
     IO.puts("404 for #{conv.path}")
     conv
   end
 
   def track(conv), do: conv
 
-  def route(%{ method: "DELETE", path: "/bears/" <> _id} = conv) do
-    %{ conv | status: 403, resp_body: "Deleting a bear is forbidden!" }
+  def route(%{method: "DELETE", path: "/bears/" <> _id} = conv) do
+    %{conv | status: 403, resp_body: "Deleting a bear is forbidden!"}
   end
 
   def route(conv) do
@@ -49,23 +49,23 @@ defmodule Servy.Handler do
   end
 
   def route(conv, "GET", "/bears" <> id) do
-    %{ conv | status: 200, resp_body: "bear #{id}" }
+    %{conv | status: 200, resp_body: "bear #{id}"}
   end
 
   def route(conv, "GET", "/bears") do
-    %{ conv | status: 200, resp_body: "Teddy, Paddington" }
+    %{conv | status: 200, resp_body: "Teddy, Paddington"}
   end
 
   def route(conv, "GET", "/bigfoot") do
-    %{ conv | status: 200, resp_body: "roooarrr" }
+    %{conv | status: 200, resp_body: "roooarrr"}
   end
 
   def route(conv, "GET", "/wildthings") do
-    %{ conv | status: 200, resp_body: "Bears, Lions, Tigers" }
+    %{conv | status: 200, resp_body: "Bears, Lions, Tigers"}
   end
 
   def route(conv, _method, path) do
-    %{ conv | status: 404, resp_body: "No #{path} here!" }
+    %{conv | status: 404, resp_body: "No #{path} here!"}
   end
 
   def format_response(conv) do
