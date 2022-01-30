@@ -64,8 +64,30 @@ defmodule Servy.Handler do
     %{conv | status: 200, resp_body: "Bears, Lions, Tigers"}
   end
 
+  def route(conv, "GET", "/pages/" <> page_name) do
+    {status, content} = Path.expand("../../pages/", __DIR__)
+      |> Path.join("#{page_name}.html")
+      |> File.read
+      |> handle_file_read
+  
+    %{conv | status: status, resp_body: content}
+  end
+
   def route(conv, _method, path) do
     %{conv | status: 404, resp_body: "No #{path} here!"}
+  end
+
+  def handle_file_read({:ok, content}) do
+    {200, content}
+  end
+
+  def handle_file_read({:error, :enoent}) do
+    {404, "File not found"}
+  end
+
+  def handle_file_read({:error, reason}) do
+    # how to test this?
+    {500, "File error: #{reason}"}
   end
 
   def format_response(conv) do

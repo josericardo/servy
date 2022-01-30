@@ -63,4 +63,30 @@ defmodule ServyHandlerTest do
     response = Servy.Handler.handle(request)
     assert String.contains?(response, "bear /2")
   end
+
+  test "Can serve static pages" do
+    request = """
+    GET /pages/about HTTP/1.1
+    Host: example.com
+    User-Agent: ExampleBrowser/1.0
+    Accept: */*
+
+    """
+
+    response = Servy.Handler.handle(request)
+    assert String.contains?(response, "about page")
+  end
+
+  test "Returns 404 for missing pages" do
+    request = """
+    GET /pages/about-us HTTP/1.1
+    Host: example.com
+    User-Agent: ExampleBrowser/1.0
+    Accept: */*
+
+    """
+
+    response = Servy.Handler.handle(request)
+    assert String.contains?(response, "File not found")
+  end
 end
